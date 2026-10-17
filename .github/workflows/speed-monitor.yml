@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 * * * *'   # every hour (GitHub may start it a few minutes late)
   workflow_dispatch:       # "Run workflow" button for a manual round
+  push:                    # run right away when the runner or its settings change
+    paths:
+      - 'runner/run.js'
+      - 'runner/config.json'
+      - '.github/workflows/speed-monitor.yml'
 
 concurrency:
   group: speed-monitor
