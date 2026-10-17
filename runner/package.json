@@ -1,0 +1,16 @@
+{
+  "name": "speed-monitor-runner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hourly Lighthouse measurements for two sites, uploaded to the public report",
+  "scripts": {
+    "start": "node run.js",
+    "once": "node run.js --once"
+  },
+  "engines": { "node": ">=22.19" },
+  "dependencies": {
+    "chrome-launcher": "1.2.1",
+    "lighthouse": "13.4.1"
+  }
+}

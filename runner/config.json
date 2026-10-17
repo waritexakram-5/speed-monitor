@@ -1,0 +1,15 @@
+{
+  "sites": [
+    { "name": "waritex", "url": "https://eg.waritex.com/" },
+    { "name": "zee-official", "url": "https://zee-official.com/" },
+    { "name": "curatingcambridge", "url": "https://curatingcambridge.co.uk/" },
+    { "name": "nalgene", "url": "https://nalgene.com/" }
+  ],
+  "strategies": ["mobile", "desktop"],
+  "interval_minutes": 60,
+  "timezone": "Africa/Cairo",
+  "upload_url": "",
+  "upload_token": "",
+  "chrome_path": "",
+  "retries": 1
+}
