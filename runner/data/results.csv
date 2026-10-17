@@ -1,0 +1,9 @@
+round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms,ttfb_ms,page_kb,requests,benchmark,error
+20261017-1745,2026-10-17T17:45:32,zee-official,https://zee-official.com/,mobile,ok,27,9057,22310,2542,0.002,9341,245,2938,320,2931,
+20261017-1745,2026-10-17T17:45:32,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,42,7368,16673,602,0,7734,25,3284,347,3124,
+20261017-1745,2026-10-17T17:45:32,nalgene,https://nalgene.com/,mobile,ok,56,2047,19031,363,0.054,9417,75,9455,195,3026,
+20261017-1745,2026-10-17T17:45:32,waritex,https://eg.waritex.com/,mobile,ok,35,7147,14686,1066,0,7923,44,1953,101,3015,
+20261017-1745,2026-10-17T17:45:32,zee-official,https://zee-official.com/,desktop,ok,54,5132,8856,117,0.015,5132,75,3600,349,3031,
+20261017-1745,2026-10-17T17:45:32,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,93,644,1537,77,0.061,1138,19,3322,299,3118,
+20261017-1745,2026-10-17T17:45:32,nalgene,https://nalgene.com/,desktop,ok,72,514,3469,7,0.115,2538,33,8382,209,3112,
+20261017-1745,2026-10-17T17:45:32,waritex,https://eg.waritex.com/,desktop,ok,95,557,1529,35,0.004,798,53,1771,113,3069,
