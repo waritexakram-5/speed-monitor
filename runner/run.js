@@ -1,23 +1,24 @@
-// Speed monitor runner: measures every site x strategy with Lighthouse (the engine behind
-// PageSpeed Insights), back to back in the same round, then uploads the rows to the report.
+// Speed monitor runner: measures every site x strategy, then uploads the rows to the report.
+//
+// With PSI_API_KEY set: Google PageSpeed Insights API (the same results as pagespeed.web.dev),
+//   all tests of a round sent at the same moment.
+// Without it: local Lighthouse + Chrome, tests run one after another.
 //
 //   node run.js          keep running, one round at the top of every hour
 //   node run.js --once   one round, then exit
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import lighthouse from 'lighthouse';
-import desktopConfig from 'lighthouse/core/config/desktop-config.js';
-import * as chromeLauncher from 'chrome-launcher';
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const DATA = path.join(DIR, 'data');
 const CSV = path.join(DATA, 'results.csv');
 const PENDING = path.join(DATA, 'pending.json'); // rows not uploaded yet
 const cfg = JSON.parse(fs.readFileSync(path.join(DIR, 'config.json'), 'utf8'));
-// On GitHub Actions the upload address and token come from repository secrets.
+// On GitHub Actions these come from repository secrets.
 cfg.upload_url = process.env.UPLOAD_URL || cfg.upload_url;
 cfg.upload_token = process.env.UPLOAD_TOKEN || cfg.upload_token;
+cfg.psi_api_key = process.env.PSI_API_KEY || cfg.psi_api_key || '';
 
 export const FIELDS = [
   'round_id', 'timestamp', 'site', 'url', 'strategy', 'status',
@@ -53,7 +54,47 @@ const audit = (a, key, digits = 0) => {
   return typeof v === 'number' ? +v.toFixed(digits) : '';
 };
 
-async function runTest(site, strategy) {
+// Same Lighthouse report format from both engines.
+function metrics(lhr) {
+  if (lhr.runtimeError) throw new Error(`${lhr.runtimeError.code}: ${lhr.runtimeError.message}`);
+  const a = lhr.audits;
+  const score = lhr.categories.performance.score;
+  if (score == null) throw new Error('No performance score returned');
+  const diag = a.diagnostics?.details?.items?.[0] || {};
+  return {
+    status: 'ok',
+    score: Math.round(score * 100),
+    fcp_ms: audit(a, 'first-contentful-paint'),
+    lcp_ms: audit(a, 'largest-contentful-paint'),
+    tbt_ms: audit(a, 'total-blocking-time'),
+    cls: audit(a, 'cumulative-layout-shift', 3),
+    si_ms: audit(a, 'speed-index'),
+    ttfb_ms: audit(a, 'server-response-time'),
+    page_kb: diag.totalByteWeight ? Math.round(diag.totalByteWeight / 1024) : '',
+    requests: diag.numRequests ?? '',
+    // How fast the measuring machine was during this test. A low value = busy machine, not a slow site.
+    benchmark: Math.round(lhr.environment?.benchmarkIndex || 0) || '',
+    error: '',
+  };
+}
+
+async function runPsi(site, strategy) {
+  const params = new URLSearchParams({ url: site.url, strategy, category: 'performance', key: cfg.psi_api_key });
+  const res = await fetch(`https://www.googleapis.com/pagespeedonline/v5/runPagespeed?${params}`, {
+    signal: AbortSignal.timeout(180000),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || !body.lighthouseResult) {
+    const msg = body.error?.message || `unexpected response`;
+    throw new Error(`HTTP ${res.status}: ${msg}`.replaceAll(cfg.psi_api_key, '***'));
+  }
+  return metrics(body.lighthouseResult);
+}
+
+async function runLighthouse(site, strategy) {
+  const { default: lighthouse } = await import('lighthouse');
+  const { default: desktopConfig } = await import('lighthouse/core/config/desktop-config.js');
+  const chromeLauncher = await import('chrome-launcher');
   const chrome = await chromeLauncher.launch({
     chromePath: cfg.chrome_path || undefined,
     chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
@@ -64,27 +105,7 @@ async function runTest(site, strategy) {
       { port: chrome.port, output: 'json', logLevel: 'error', onlyCategories: ['performance'] },
       strategy === 'desktop' ? desktopConfig : undefined,
     );
-    const lhr = result.lhr;
-    if (lhr.runtimeError) throw new Error(`${lhr.runtimeError.code}: ${lhr.runtimeError.message}`);
-    const a = lhr.audits;
-    const score = lhr.categories.performance.score;
-    if (score == null) throw new Error('Lighthouse returned no performance score');
-    const diag = a.diagnostics?.details?.items?.[0] || {};
-    return {
-      status: 'ok',
-      score: Math.round(score * 100),
-      fcp_ms: audit(a, 'first-contentful-paint'),
-      lcp_ms: audit(a, 'largest-contentful-paint'),
-      tbt_ms: audit(a, 'total-blocking-time'),
-      cls: audit(a, 'cumulative-layout-shift', 3),
-      si_ms: audit(a, 'speed-index'),
-      ttfb_ms: audit(a, 'server-response-time'),
-      page_kb: diag.totalByteWeight ? Math.round(diag.totalByteWeight / 1024) : '',
-      requests: diag.numRequests ?? '',
-      // How fast the measuring machine was during this test. A low value = busy machine, not a slow site.
-      benchmark: Math.round(lhr.environment?.benchmarkIndex || 0) || '',
-      error: '',
-    };
+    return metrics(result.lhr);
   } finally {
     // On Windows, deleting Chrome's temp profile can fail while Chrome is still exiting; harmless.
     try { await chrome.kill(); } catch { /* ignore cleanup errors */ }
@@ -112,31 +133,42 @@ async function upload(rows) {
   }
 }
 
+async function measure(job, roundId, roundTs, test) {
+  const { site, strategy } = job;
+  const row = { round_id: roundId, timestamp: roundTs, site: site.name, url: site.url, strategy };
+  for (let attempt = 0; attempt <= cfg.retries; attempt++) {
+    try {
+      Object.assign(row, await test(site, strategy));
+      break;
+    } catch (e) {
+      Object.assign(row, { status: 'error', error: String(e.message || e).replace(/\s+/g, ' ').slice(0, 300) });
+      if (attempt < cfg.retries) await sleep(15000);
+    }
+  }
+  log(row.status === 'ok'
+    ? `${roundId} ${site.name.padEnd(18)} ${strategy.padEnd(8)} score=${row.score} LCP=${row.lcp_ms} TTFB=${row.ttfb_ms} machine=${row.benchmark}`
+    : `${roundId} ${site.name.padEnd(18)} ${strategy.padEnd(8)} ERROR ${row.error}`);
+  return row;
+}
+
 async function runRound() {
   const roundTs = localNow();
   const roundId = roundTs.slice(0, 16).replace(/[-:]/g, '').replace('T', '-');
-  // All sites on one device type, then the next, so the sites in a round are measured minutes apart.
-  // The starting site rotates every hour so no site is always measured first.
-  const shift = Number(roundTs.slice(11, 13)) % cfg.sites.length;
-  const sites = [...cfg.sites.slice(shift), ...cfg.sites.slice(0, shift)];
-  const jobs = cfg.strategies.flatMap(strategy => sites.map(site => ({ site, strategy })));
-
-  const rows = [];
-  for (const { site, strategy } of jobs) {
-    const row = { round_id: roundId, timestamp: roundTs, site: site.name, url: site.url, strategy };
-    for (let attempt = 0; attempt <= cfg.retries; attempt++) {
-      try {
-        Object.assign(row, await runTest(site, strategy));
-        break;
-      } catch (e) {
-        Object.assign(row, { status: 'error', error: String(e.message || e).replace(/\s+/g, ' ').slice(0, 300) });
-        if (attempt < cfg.retries) await sleep(10000);
-      }
-    }
-    rows.push(row);
-    log(row.status === 'ok'
-      ? `${roundId} ${site.name.padEnd(14)} ${strategy.padEnd(8)} score=${row.score} LCP=${row.lcp_ms} TTFB=${row.ttfb_ms} machine=${row.benchmark}`
-      : `${roundId} ${site.name.padEnd(14)} ${strategy.padEnd(8)} ERROR ${row.error}`);
+  let rows;
+  if (cfg.psi_api_key) {
+    // Google runs the tests on its own machines, so all of them can go at the same moment.
+    log(`round ${roundId}: Google PageSpeed Insights API`);
+    const jobs = cfg.strategies.flatMap(strategy => cfg.sites.map(site => ({ site, strategy })));
+    rows = await Promise.all(jobs.map(job => measure(job, roundId, roundTs, runPsi)));
+  } else {
+    // Local Lighthouse: one test at a time so they don't slow each other down.
+    // The starting site rotates every hour so no site is always measured first.
+    log(`round ${roundId}: local Lighthouse`);
+    const shift = Number(roundTs.slice(11, 13)) % cfg.sites.length;
+    const sites = [...cfg.sites.slice(shift), ...cfg.sites.slice(0, shift)];
+    const jobs = cfg.strategies.flatMap(strategy => sites.map(site => ({ site, strategy })));
+    rows = [];
+    for (const job of jobs) rows.push(await measure(job, roundId, roundTs, runLighthouse));
   }
   appendCsv(rows);
   await upload(rows);

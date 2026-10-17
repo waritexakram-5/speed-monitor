@@ -34,6 +34,7 @@ jobs:
         env:
           UPLOAD_URL: ${{ secrets.UPLOAD_URL }}
           UPLOAD_TOKEN: ${{ secrets.UPLOAD_TOKEN }}
+          PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
         run: node run.js --once
 
       # Backup copy of every measurement, and rows that failed to upload are retried next hour.
