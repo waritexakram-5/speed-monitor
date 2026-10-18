@@ -14,6 +14,7 @@ const DIR = path.dirname(fileURLToPath(import.meta.url));
 const DATA = path.join(DIR, 'data');
 const CSV = path.join(DATA, 'results.csv');
 const PENDING = path.join(DATA, 'pending.json'); // rows not uploaded yet
+const DETAILS = path.join(DATA, 'details.jsonl'); // per-test diagnostics (LCP element, LCP phases, third parties)
 const cfg = JSON.parse(fs.readFileSync(path.join(DIR, 'config.json'), 'utf8'));
 // On GitHub Actions these come from repository secrets.
 cfg.upload_url = process.env.UPLOAD_URL || cfg.upload_url;
@@ -54,6 +55,25 @@ const audit = (a, key, digits = 0) => {
   return typeof v === 'number' ? +v.toFixed(digits) : '';
 };
 
+// The parts of the report that explain WHY a test was slow; kept small (one JSON line per test).
+const DETAIL_AUDITS = ['lcp-breakdown-insight', 'lcp-discovery-insight', 'largest-contentful-paint-element',
+  'render-blocking-insight', 'third-party-summary', 'bootup-time'];
+function details(lhr) {
+  const out = {};
+  for (const id of DETAIL_AUDITS) {
+    const a = lhr.audits[id];
+    if (!a) continue;
+    // Drop layout/selector noise and table headings; round numbers; keep the top 5 rows.
+    const d = JSON.parse(JSON.stringify(a.details || {}), (k, v) =>
+      ['boundingRect', 'lhId', 'path', 'selector', 'headings', 'debugData'].includes(k) ? undefined
+        : typeof v === 'number' ? Math.round(v) : v);
+    const trim = x => { if (Array.isArray(x?.items)) { x.items = x.items.slice(0, 5); x.items.forEach(trim); } };
+    trim(d);
+    out[id] = { value: a.displayValue || a.numericValue || '', details: d };
+  }
+  return out;
+}
+
 // Same Lighthouse report format from both engines.
 function metrics(lhr) {
   if (lhr.runtimeError) throw new Error(`${lhr.runtimeError.code}: ${lhr.runtimeError.message}`);
@@ -75,6 +95,7 @@ function metrics(lhr) {
     // How fast the measuring machine was during this test. A low value = busy machine, not a slow site.
     benchmark: Math.round(lhr.environment?.benchmarkIndex || 0) || '',
     error: '',
+    details: details(lhr),
   };
 }
 
@@ -170,6 +191,12 @@ async function runRound() {
     rows = [];
     for (const job of jobs) rows.push(await measure(job, roundId, roundTs, runLighthouse));
   }
+  // Diagnostics stay in the GitHub backup only; the report receives the summary columns.
+  const detailLines = rows.filter(r => r.details).map(r => JSON.stringify(
+    { round_id: r.round_id, site: r.site, strategy: r.strategy, score: r.score, lcp_ms: r.lcp_ms, ...r.details }));
+  fs.mkdirSync(DATA, { recursive: true });
+  if (detailLines.length) fs.appendFileSync(DETAILS, detailLines.join('\n') + '\n');
+  rows.forEach(r => delete r.details);
   appendCsv(rows);
   await upload(rows);
 }
