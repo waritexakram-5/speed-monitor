@@ -567,3 +567,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261020-1634,2026-10-20T16:34:32,zee-official,https://zee-official.com/,desktop,ok,60,561,1262,2048,0.012,2889,16,3339,336,643,
 20261020-1634,2026-10-20T16:34:32,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,97,577,787,134,0.006,880,6,3008,312,542,
 20261020-1634,2026-10-20T16:34:32,nalgene,https://nalgene.com/,desktop,ok,62,481,1662,624,0.034,2929,9,4132,139,312,
+20261020-1726,2026-10-20T17:26:39,waritex,https://eg.waritex.com/,mobile,ok,60,3199,4820,474,0,5855,97,1764,79,437,
+20261020-1726,2026-10-20T17:26:39,zee-official,https://zee-official.com/,mobile,ok,38,3301,8627,1411,0.002,6198,17,2765,329,660,
+20261020-1726,2026-10-20T17:26:39,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,83,2085,3805,203,0,3130,9,2090,201,506,
+20261020-1726,2026-10-20T17:26:39,nalgene,https://nalgene.com/,mobile,error,,,,,,,,,,,HTTP 200: unexpected response
+20261020-1726,2026-10-20T17:26:39,waritex,https://eg.waritex.com/,desktop,ok,71,506,642,940,0.01,1209,216,1827,81,731,
+20261020-1726,2026-10-20T17:26:39,zee-official,https://zee-official.com/,desktop,ok,64,628,1202,1311,0.013,1918,16,3339,335,458,
+20261020-1726,2026-10-20T17:26:39,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,99,569,721,39,0.005,984,69,2438,196,1037,
+20261020-1726,2026-10-20T17:26:39,nalgene,https://nalgene.com/,desktop,ok,69,461,1742,415,0.034,2481,8,5350,146,558,
