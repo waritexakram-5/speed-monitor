@@ -2135,3 +2135,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261028-2239,2026-10-28T22:39:53,zee-official,https://zee-official.com/,desktop,ok,53,428,3421,644,0.015,1841,25,8083,460,1143,
 20261028-2239,2026-10-28T22:39:53,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,97,571,1141,100,0,775,9,2630,256,493,
 20261028-2239,2026-10-28T22:39:53,nalgene,https://nalgene.com/,desktop,error,,,,,,,,,,,HTTP 429: Lighthouse is temporarily over capacity; please retry later.
+20261028-2331,2026-10-28T23:31:59,waritex,https://eg.waritex.com/,mobile,ok,59,3249,4918,490,0,5540,208,1727,75,411,
+20261028-2331,2026-10-28T23:31:59,zee-official,https://zee-official.com/,mobile,ok,41,2551,11252,1217,0.002,7083,45,2866,330,789,
+20261028-2331,2026-10-28T23:31:59,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,78,2074,4456,244,0,2680,12,2438,287,530,
+20261028-2331,2026-10-28T23:31:59,nalgene,https://nalgene.com/,mobile,ok,42,4432,16648,582,0,12025,8,5368,142,476,
+20261028-2331,2026-10-28T23:31:59,waritex,https://eg.waritex.com/,desktop,ok,72,464,601,655,0.01,1809,208,1830,92,765,
+20261028-2331,2026-10-28T23:31:59,zee-official,https://zee-official.com/,desktop,ok,61,482,1001,1698,0.013,3044,41,8070,470,687,
+20261028-2331,2026-10-28T23:31:59,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,98,588,741,116,0.002,846,9,2849,297,498,
+20261028-2331,2026-10-28T23:31:59,nalgene,https://nalgene.com/,desktop,ok,88,505,1702,107,0.044,2071,9,5684,152,1037,
