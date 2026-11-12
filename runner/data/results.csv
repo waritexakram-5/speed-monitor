@@ -4791,3 +4791,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261112-1252,2026-11-12T12:52:57,zee-official,https://zee-official.com/,desktop,ok,53,467,1941,3234,0.012,3262,42,6156,353,389,
 20261112-1252,2026-11-12T12:52:57,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,98,322,1027,72,0,1112,11,2710,265,851,
 20261112-1252,2026-11-12T12:52:57,nalgene,https://nalgene.com/,desktop,ok,92,363,1681,29,0.036,1574,6,7924,141,1296,
+20261112-1350,2026-11-12T13:50:12,waritex,https://eg.waritex.com/,mobile,ok,97,1667,2417,11,0.003,2572,244,443,21,492,
+20261112-1350,2026-11-12T13:50:12,zee-official,https://zee-official.com/,mobile,ok,34,2028,15451,6347,0,9701,47,2922,340,427,
+20261112-1350,2026-11-12T13:50:12,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,91,1249,3076,192,0,2196,10,2330,283,562,
+20261112-1350,2026-11-12T13:50:12,nalgene,https://nalgene.com/,mobile,ok,75,1396,5101,131,0.026,5800,7,7880,138,980,
+20261112-1350,2026-11-12T13:50:12,waritex,https://eg.waritex.com/,desktop,error,,,,,,,,,,,HTTP 400: Lighthouse returned error: FAILED_DOCUMENT_REQUEST. Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Details: net::ERR_TIMED_OUT)
+20261112-1350,2026-11-12T13:50:12,zee-official,https://zee-official.com/,desktop,ok,58,500,1201,4126,0.012,3977,59,5371,345,831,
+20261112-1350,2026-11-12T13:50:12,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,95,555,709,42,0.123,891,10,2823,248,664,
+20261112-1350,2026-11-12T13:50:12,nalgene,https://nalgene.com/,desktop,ok,91,358,1481,27,0.101,1529,7,7813,142,1318,
