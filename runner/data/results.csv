@@ -4959,3 +4959,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261113-1150,2026-11-13T11:50:54,zee-official,https://zee-official.com/,desktop,ok,58,511,1201,6671,0.012,5095,62,5463,346,503,
 20261113-1150,2026-11-13T11:50:54,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,95,321,681,175,0.003,795,11,2677,265,530,
 20261113-1150,2026-11-13T11:50:54,nalgene,https://nalgene.com/,desktop,ok,97,357,601,21,0.101,1033,9,6705,129,1282,
+20261113-1251,2026-11-13T12:51:48,waritex,https://eg.waritex.com/,mobile,ok,90,1654,3001,142,0,4478,233,1454,118,1330,
+20261113-1251,2026-11-13T12:51:48,zee-official,https://zee-official.com/,mobile,ok,49,1960,13276,745,0,6777,41,2917,317,1225,
+20261113-1251,2026-11-13T12:51:48,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,91,1104,2851,236,0,2563,10,2071,215,617,
+20261113-1251,2026-11-13T12:51:48,nalgene,https://nalgene.com/,mobile,error,,,,,,,,,,,The operation was aborted due to timeout
+20261113-1251,2026-11-13T12:51:48,waritex,https://eg.waritex.com/,desktop,ok,100,437,529,26,0.01,556,40,526,37,720,
+20261113-1251,2026-11-13T12:51:48,zee-official,https://zee-official.com/,desktop,ok,64,431,1221,1922,0.013,1796,63,5501,349,1271,
+20261113-1251,2026-11-13T12:51:48,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,94,303,741,100,0.125,918,28,2770,229,352,
+20261113-1251,2026-11-13T12:51:48,nalgene,https://nalgene.com/,desktop,ok,90,370,1481,38,0.101,1625,8,7837,137,1164,
