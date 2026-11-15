@@ -5311,3 +5311,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261115-0850,2026-11-15T08:50:43,zee-official,https://zee-official.com/,desktop,ok,62,514,1201,2164,0.012,2297,45,5497,348,1008,
 20261115-0850,2026-11-15T08:50:43,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,95,344,807,8,0.126,854,33,2768,232,1277,
 20261115-0850,2026-11-15T08:50:43,nalgene,https://nalgene.com/,desktop,ok,94,378,601,126,0.102,1232,10,6737,130,1012,
+20261115-0957,2026-11-15T09:57:25,waritex,https://eg.waritex.com/,mobile,ok,80,1652,2552,627,0.002,2638,15,1407,46,542,
+20261115-0957,2026-11-15T09:57:25,zee-official,https://zee-official.com/,mobile,ok,46,1960,10576,1222,0,4794,45,2967,327,1050,
+20261115-0957,2026-11-15T09:57:25,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,95,1088,2776,29,0.003,3250,8,2360,243,1273,
+20261115-0957,2026-11-15T09:57:25,nalgene,https://nalgene.com/,mobile,ok,55,2127,18376,149,0.169,10521,6,12479,177,1303,
+20261115-0957,2026-11-15T09:57:25,waritex,https://eg.waritex.com/,desktop,ok,100,455,561,30,0.005,674,59,522,36,578,
+20261115-0957,2026-11-15T09:57:25,zee-official,https://zee-official.com/,desktop,ok,57,466,1601,3516,0.012,2962,45,5508,350,866,
+20261115-0957,2026-11-15T09:57:25,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,98,309,1089,29,0,699,7,2541,228,787,
+20261115-0957,2026-11-15T09:57:25,nalgene,https://nalgene.com/,desktop,error,,,,,,,,,,,HTTP 200: unexpected response
