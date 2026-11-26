@@ -5743,3 +5743,11 @@ round_id,timestamp,site,url,strategy,status,score,fcp_ms,lcp_ms,tbt_ms,cls,si_ms
 20261126-0646,2026-11-26T06:46:47,zee-official,https://zee-official.com/,desktop,ok,61,448,1581,2144,0.013,1831,53,5576,351,998,
 20261126-0646,2026-11-26T06:46:47,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,99,301,721,20,0.068,749,9,2859,257,1241,
 20261126-0646,2026-11-26T06:46:47,nalgene,https://nalgene.com/,desktop,ok,72,422,2041,76,0.262,2176,8,9206,161,755,
+20261126-1644,2026-11-26T16:44:34,waritex,https://eg.waritex.com/,mobile,ok,84,1654,2404,448,0,4084,84,1771,45,451,
+20261126-1644,2026-11-26T16:44:34,zee-official,https://zee-official.com/,mobile,ok,29,3647,13903,4954,0.007,10987,56,3322,358,677,
+20261126-1644,2026-11-26T16:44:34,curatingcambridge,https://curatingcambridge.co.uk/,mobile,ok,66,2459,9990,3,0,6414,47,3511,288,686,
+20261126-1644,2026-11-26T16:44:34,nalgene,https://nalgene.com/,mobile,ok,86,1978,3151,53,0.113,4385,9,7647,140,1301,
+20261126-1644,2026-11-26T16:44:34,waritex,https://eg.waritex.com/,desktop,ok,72,487,841,777,0.011,1084,97,1816,64,642,
+20261126-1644,2026-11-26T16:44:34,zee-official,https://zee-official.com/,desktop,error,,,,,,,,,,,HTTP 500: Lighthouse returned error: Something went wrong.
+20261126-1644,2026-11-26T16:44:34,curatingcambridge,https://curatingcambridge.co.uk/,desktop,ok,97,306,1132,51,0.002,1071,46,3343,300,929,
+20261126-1644,2026-11-26T16:44:34,nalgene,https://nalgene.com/,desktop,ok,77,1158,1337,231,0.043,3738,9,7824,145,724,
